@@ -1,206 +1,261 @@
-# Proyecto Semana 01 — App de Tarjetas
+# Proyecto Semana 02 — App de Listas con Búsqueda
 
-Semana 01 — Fundamentos RN | Tiempo estimado: 3h
+Semana 02 — Listas, Inputs y Estilos  
+Fase 1 — Fundamentos React Native
 
 ---
 
 ## 🎯 Objetivo
 
-Construir una app de pantalla única que muestre una lista de tarjetas usando los Core Components y Flexbox. La app debe adaptarse al dominio asignado por el instructor.
+Construir una app móvil que combine `FlatList` con `TextInput` para listar y filtrar elementos del dominio asignado. Además, se aplican temas visuales consistentes usando constantes de estilo como `COLORS`, `TYPOGRAPHY`, `SPACING`, `RADIUS` y otras definiciones reutilizables.
 
-En este proyecto, el dominio asignado es **Empresa de mensajería / Courier**.  
-Cada tarjeta representa un paquete o envío dentro de una operación de mensajería. La app permite visualizar datos relacionados con paquetes, rutas, conductores y clientes.
+En este proyecto, el dominio asignado es **Empresa de mensajería / Courier**. La app muestra una lista de paquetes registrados en una operación de mensajería y permite buscar en tiempo real por código, cliente, conductor, ruta, destino, estado o tipo de servicio.
 
-El objetivo principal es aplicar los fundamentos de React Native trabajados durante la Semana 01:
-
-- Core Components.
-- Estilos con `StyleSheet.create`.
-- Layouts con Flexbox.
-- TypeScript con tipos explícitos.
-- Organización básica de una app en carpetas.
+El objetivo principal de esta semana es mejorar la app construida en la Semana 01. En lugar de renderizar tarjetas con una lista simple, ahora se usa `FlatList`, que es más adecuado para listas dinámicas o con mayor cantidad de elementos. También se agrega un campo de búsqueda con `TextInput` para mejorar la interacción del usuario.
 
 ---
 
-## 📋 Tu Dominio Asignado
+## 📋 Dominio asignado
 
-**Dominio:** Empresa de mensajería / Courier.
+**Empresa de mensajería / Courier**
 
-Cada aprendiz trabaja sobre un dominio único para evitar copias y fomentar implementaciones originales.
+Este dominio representa una empresa encargada de gestionar envíos, paquetes, rutas de entrega, conductores y clientes destinatarios.
 
-En este caso, la app está enfocada en una empresa courier que administra envíos activos, rutas de entrega, conductores asignados y clientes destinatarios.
-
----
-
-## 💡 Adaptación por Dominio
-
-| Dominio | Elemento | Datos en la tarjeta |
-|---|---|---|
-| 🚚 Empresa de mensajería / Courier | Paquete / Envío | Código, tipo de servicio, estado, cliente, dirección, conductor, vehículo, ruta, trayecto, ETA, peso, paradas e imagen |
+En la app, cada elemento de la lista representa un paquete o envío. Cada paquete contiene información operativa útil para consultar rápidamente su estado dentro del flujo logístico.
 
 ---
 
-## ✅ Requisitos Funcionales
+## 📦 Descripción del proyecto
 
-- Pantalla principal con `ScrollView`.
-- Mínimo 3 tarjetas con datos coherentes al dominio.
-- Cada tarjeta muestra:
-  - Una imagen local o URL.
-  - Al menos 2 textos con estilos distintos.
-  - Una acción usando `Pressable` con feedback visual.
-- Header de la app con el nombre del dominio.
-- Estilos con `StyleSheet.create`, sin estilos inline.
-- TypeScript con interfaces definidas para los datos del dominio.
-- Datos organizados en archivos separados.
-- Componente de tarjeta reutilizable.
-- Pantalla principal separada en una carpeta `screens`.
+**Mensajería Courier** es una aplicación móvil de pantalla única construida con React Native y Expo.
 
----
+La pantalla principal permite consultar una lista de paquetes de una empresa de mensajería. Cada paquete se muestra mediante una tarjeta reutilizable que contiene datos como el código de seguimiento, cliente, destino, conductor, ruta, estado, tipo de servicio, ETA y peso.
 
-## ✅ Requisitos implementados
+La app incluye un campo de búsqueda en la parte superior. Mientras el usuario escribe, la lista se filtra automáticamente en tiempo real. Esto permite encontrar rápidamente un envío específico sin recorrer toda la lista manualmente.
 
-La app implementa los requisitos de la siguiente manera:
-
-- Usa `ScrollView` para mostrar la lista de tarjetas.
-- Muestra más de 3 tarjetas de paquetes.
-- Cada tarjeta tiene una imagen por URL.
-- Cada tarjeta muestra información de paquete, cliente, conductor y ruta.
-- Cada tarjeta incluye un botón `Pressable`.
-- El botón tiene feedback visual al presionarse.
-- El botón permite mostrar u ocultar el detalle operativo del envío.
-- El header muestra el nombre **Mensajería Courier**.
-- Los estilos están definidos con `StyleSheet.create`.
-- Los datos del dominio están tipados con TypeScript.
-- La estructura del código está separada en `types`, `data`, `components` y `screens`.
-
----
-
-## 📁 Estructura del starter
-
-```txt
-starter/
-├── App.tsx               # Punto de entrada
-├── package.json          # Dependencias del proyecto
-├── tsconfig.json         # Configuración TypeScript
-├── app.json              # Configuración Expo
-├── index.ts              # Registro del componente principal
-├── assets/               # Recursos estáticos
-└── src/
-    ├── types/
-    │   └── index.ts      # Interfaces del dominio Courier
-    ├── data/
-    │   └── mockData.ts   # Datos de ejemplo de paquetes
-    ├── components/
-    │   └── ItemCard.tsx  # Componente tarjeta reutilizable
-    └── screens/
-        └── HomeScreen.tsx # Pantalla principal con la lista
-```
-
----
-
-## 🧩 Entidades del dominio
-
-La app utiliza cuatro entidades principales relacionadas con una empresa de mensajería:
-
-### Package / Envío
-
-Representa el paquete gestionado por la empresa.
-
-Datos usados:
+La búsqueda funciona sobre varios campos del dominio:
 
 - Código del paquete.
-- Tipo de servicio.
-- Estado.
-- ETA.
-- Peso.
-- Imagen.
-
-### Customer / Cliente
-
-Representa el cliente o destinatario del paquete.
-
-Datos usados:
-
-- Nombre.
-- Dirección.
-- Teléfono.
-
-### Driver / Conductor
-
-Representa el conductor asignado al envío.
-
-Datos usados:
-
-- Nombre.
-- Vehículo.
-- Calificación.
-
-### Route / Ruta
-
-Representa la ruta de entrega asignada al paquete.
-
-Datos usados:
-
-- Nombre de la ruta.
-- Origen.
-- Destino.
-- Número de paradas.
-
----
-
-## 🖼️ Datos mostrados en cada tarjeta
-
-Cada tarjeta de envío muestra información operativa como:
-
-- Código del paquete.
-- Tipo de servicio.
-- Estado del envío.
 - Nombre del cliente.
-- Dirección de entrega.
-- Conductor asignado.
-- Vehículo.
-- Ruta.
-- Trayecto.
-- ETA.
-- Peso.
-- Número de paradas.
-- Imagen relacionada con logística o mensajería.
+- Dirección o destino.
+- Nombre del conductor.
+- Ruta asignada.
+- Estado del envío.
+- Tipo de servicio.
+
+Si la búsqueda no encuentra coincidencias, la app muestra un estado vacío personalizado indicando que no se encontraron envíos. Esto mejora la experiencia de usuario y evita que la pantalla quede vacía sin explicación.
+
+---
+
+## 🧩 Entidad principal
+
+La entidad principal del proyecto es:
+
+**CourierPackage**
+
+Esta interfaz representa un paquete o envío dentro del sistema de mensajería.
+
+Campos usados:
+
+- `id`: identificador único del paquete.
+- `trackingCode`: código de seguimiento del envío.
+- `customerName`: nombre del cliente o destinatario.
+- `destination`: dirección o destino de entrega.
+- `driverName`: conductor asignado.
+- `routeName`: ruta de entrega.
+- `status`: estado actual del paquete.
+- `serviceType`: tipo de servicio contratado.
+- `estimatedDelivery`: hora o fecha estimada de entrega.
+- `weightKg`: peso del paquete en kilogramos.
+
+---
+
+## ✅ Requisitos cumplidos
+
+- Lista principal usando `FlatList`.
+- Mínimo 10 items del dominio.
+- Búsqueda en tiempo real usando `TextInput`.
+- Filtrado case-insensitive.
+- Estado vacío personalizado cuando no hay resultados.
+- Componente reutilizable `ItemCard`.
+- Uso de `KeyboardAvoidingView`.
+- Estilos basados en constantes desde `src/theme/index.ts`.
+- `keyExtractor` usando el `id` del item.
+- Filtrado con `useMemo`.
+- `renderItem`, `keyExtractor`, separador y estado vacío con `useCallback`.
+- Separador visual entre tarjetas con `ItemSeparatorComponent`.
+- Código TypeScript sin uso de `any`.
 
 ---
 
 ## 🧱 Core Components usados
 
-En el proyecto se utilizaron los Core Components solicitados para la Semana 01:
-
 - `View`
 - `Text`
-- `Image`
-- `ScrollView`
+- `TextInput`
+- `FlatList`
 - `Pressable`
-- `TouchableOpacity`
 - `SafeAreaView`
+- `KeyboardAvoidingView`
 - `StyleSheet.create`
+
+Estos componentes permiten construir la interfaz usando únicamente herramientas nativas de React Native, sin librerías externas de UI.
 
 ---
 
-## 📐 Uso de Flexbox
+## 🔎 Funcionalidad de búsqueda
 
-La interfaz utiliza Flexbox para organizar los elementos en pantalla.
+La búsqueda se realiza en tiempo real. Cada vez que el usuario escribe en el `TextInput`, el estado `searchText` se actualiza y la lista filtrada se recalcula.
 
-Propiedades utilizadas:
+La lógica de filtrado se implementa con `useMemo`, lo que permite evitar cálculos innecesarios en cada renderizado.
 
-- `flex`
-- `flexDirection`
-- `justifyContent`
-- `alignItems`
-- `gap`
+La búsqueda no distingue entre mayúsculas y minúsculas, porque tanto el texto ingresado como los campos del paquete se normalizan con `toLowerCase()`.
 
-Ejemplos de uso dentro de la app:
+Ejemplos de búsqueda:
 
-- `flex: 1` para que la pantalla ocupe todo el espacio disponible.
-- `flexDirection: 'row'` para organizar filtros, tarjetas resumen y cajas de información.
-- `justifyContent: 'space-between'` para separar código del paquete y estado.
-- `alignItems: 'center'` para alinear elementos en filas.
-- `gap` para separar elementos dentro de contenedores.
+```txt
+ENV-5019
+Carlos
+Entregado
+Ruta Norte
+Express
+```
+
+Si no hay coincidencias, se muestra el mensaje:
+
+```txt
+No se encontraron envíos
+```
+
+---
+
+## 📋 Uso de FlatList
+
+La lista principal del proyecto usa `FlatList`, no `ScrollView`.
+
+`FlatList` es más adecuado para listas con varios elementos porque está optimizado para renderizar listas de datos. Además, permite usar propiedades específicas como:
+
+- `data`
+- `renderItem`
+- `keyExtractor`
+- `ItemSeparatorComponent`
+- `ListEmptyComponent`
+- `contentContainerStyle`
+
+En este proyecto, `keyExtractor` usa el campo `id` del paquete:
+
+```tsx
+const keyExtractor = useCallback((item: CourierPackage) => item.id, []);
+```
+
+No se usa el índice del array como key.
+
+---
+
+## 🎨 Theming
+
+Los estilos usan constantes definidas en:
+
+```txt
+src/theme/index.ts
+```
+
+Constantes usadas:
+
+- `COLORS`
+- `TYPOGRAPHY`
+- `SPACING`
+- `RADIUS`
+- `BORDER_WIDTH`
+- `INTERACTION`
+- `SHADOWS`
+
+El uso de constantes permite mantener una identidad visual consistente en toda la app. También facilita modificar colores, tamaños o espaciados desde un solo lugar sin tener que cambiar cada componente manualmente.
+
+---
+
+## 🎨 Decisiones de diseño
+
+Se mantuvo una paleta sobria en tonos azules, grises y blancos para representar un entorno logístico y operativo.
+
+Las tarjetas tienen fondo blanco para destacar sobre el fondo general de la pantalla. Los estados del paquete usan colores diferentes para facilitar la lectura rápida:
+
+- Verde para entregado.
+- Azul para en tránsito.
+- Amarillo para pendiente.
+- Morado para programado.
+- Rojo para incidencia.
+
+El campo de búsqueda se ubicó antes de la lista para que el usuario pueda filtrar inmediatamente los envíos. También se incluye un botón **Limpiar** cuando hay texto escrito, permitiendo reiniciar la búsqueda fácilmente.
+
+---
+
+## 📁 Estructura del proyecto
+
+```txt
+starter/
+├── App.tsx
+├── app.json
+├── package.json
+├── tsconfig.json
+└── src/
+    ├── types/
+    │   └── index.ts
+    ├── data/
+    │   └── mockData.ts
+    ├── components/
+    │   └── ItemCard.tsx
+    ├── screens/
+    │   └── HomeScreen.tsx
+    └── theme/
+        └── index.ts
+```
+
+---
+
+## 📄 Descripción de archivos principales
+
+### `App.tsx`
+
+Punto de entrada de la app. Renderiza la pantalla principal `HomeScreen`.
+
+### `src/screens/HomeScreen.tsx`
+
+Contiene la pantalla principal. Aquí se implementa:
+
+- Header.
+- `TextInput` de búsqueda.
+- Lógica de filtrado.
+- `FlatList`.
+- Estado vacío.
+- Manejo del teclado.
+
+### `src/components/ItemCard.tsx`
+
+Componente reutilizable que muestra la información de cada paquete.
+
+Cada tarjeta muestra varios campos del dominio:
+
+- Código.
+- Cliente.
+- Destino.
+- Conductor.
+- Ruta.
+- Estado.
+- ETA.
+- Peso.
+
+### `src/data/mockData.ts`
+
+Contiene los datos simulados del dominio. Incluye más de 10 paquetes para cumplir el requisito de la semana.
+
+### `src/types/index.ts`
+
+Contiene los tipos e interfaces TypeScript del dominio.
+
+### `src/theme/index.ts`
+
+Contiene constantes visuales reutilizables para estilos.
 
 ---
 
@@ -220,91 +275,88 @@ También se puede ejecutar con:
 npx expo start
 ```
 
-Luego se puede abrir la app usando:
+Luego se puede abrir la app en:
 
-- Expo Go en dispositivo físico.
+- Expo Go.
 - Emulador Android.
 - Simulador iOS.
 - Navegador web si Expo lo permite.
 
 ---
 
-## 🛠️ Entregables
+## 🧪 Pruebas sugeridas
 
-- App funcional en simulador, Expo Go o navegador.
-- Mínimo 3 tarjetas con datos del dominio **Empresa de mensajería / Courier**.
-- Código subido al repositorio.
-- Nombre del dominio configurado en `app.json`.
-- Screenshot o grabación de la app funcionando.
-- README del proyecto adaptado al dominio asignado.
-
----
-
-## ⚙️ Configuración del dominio en app.json
-
-El archivo `app.json` contiene el nombre relacionado con el dominio asignado:
-
-```json
-{
-  "expo": {
-    "name": "Mensajeria Courier",
-    "slug": "mensajeria-courier"
-  }
-}
-```
-
----
-
-## 📊 Criterios de Evaluación
-
-Ver:
+Buscar por código:
 
 ```txt
-../rubrica-evaluacion.md
+ENV-5019
 ```
 
----
+Buscar por cliente:
 
-## 📌 Restricciones
+```txt
+Laura
+```
 
-- ❌ No usar `position: 'absolute'`.
-- ❌ No usar ninguna librería de UI externa.
-- ❌ No usar estilos inline como `style={{ ... }}` directo en JSX.
-- ✅ Usar solo Flexbox para construir el layout.
-- ✅ Todo el código en TypeScript con tipos explícitos.
-- ✅ Usar `StyleSheet.create` para los estilos.
+Buscar por conductor:
+
+```txt
+Carlos
+```
+
+Buscar por estado:
+
+```txt
+Entregado
+```
+
+Buscar por tipo de servicio:
+
+```txt
+Express
+```
+
+Buscar un texto inexistente:
+
+```txt
+xxxxx
+```
+
+Debe mostrarse el estado vacío:
+
+```txt
+No se encontraron envíos
+```
 
 ---
 
 ## 📸 Evidencia
 
-La entrega debe incluir una captura o grabación de la app funcionando.
+Agregar captura o grabación de la app funcionando en Expo Go, emulador o navegador.
 
 La evidencia debe mostrar:
 
-- Header con el nombre **Mensajería Courier**.
-- Lista de tarjetas de envíos.
-- Imagen visible en las tarjetas.
-- Datos del paquete, cliente, conductor y ruta.
-- Filtros por estado.
-- Botón **Ver detalle del envío**.
-- Panel de detalle operativo desplegado al presionar el botón.
+- Lista de paquetes.
+- Input de búsqueda.
+- Resultados filtrados.
+- Estado vacío cuando no hay coincidencias.
+
+---
+
+## 📌 Restricciones cumplidas
+
+- No se usó `ScrollView` para la lista principal.
+- No se usó el índice del array como key.
+- No se usó `any`.
+- No se usaron librerías externas de UI.
+- Los estilos están definidos con `StyleSheet.create`.
+- El layout está construido con Flexbox.
+- El proyecto está adaptado al dominio asignado.
 
 ---
 
 ## ✅ Resultado esperado
 
-Al ejecutar la app se muestra una pantalla de control operativo para una empresa de mensajería.
+Al ejecutar la app se muestra una pantalla de consulta de envíos para una empresa de mensajería.
 
-El usuario puede:
-
-- Visualizar paquetes activos.
-- Identificar el estado de cada envío.
-- Ver el cliente destinatario.
-- Consultar el conductor asignado.
-- Revisar la ruta y el trayecto.
-- Filtrar envíos por estado.
-- Mostrar u ocultar el detalle operativo de cada paquete.
-
-La app demuestra el uso de Core Components, estilos con `StyleSheet.create`, TypeScript y Flexbox en React Native.
-```
+El usuario puede revisar la lista de paquetes, buscar en tiempo real, consultar los datos principales de cada envío y recibir un mensaje claro cuando no hay resultados para la búsqueda realizada.

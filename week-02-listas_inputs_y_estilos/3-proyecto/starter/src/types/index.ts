@@ -2,43 +2,20 @@ export type PackageStatus =
   | 'Pendiente'
   | 'En tránsito'
   | 'Entregado'
-  | 'Programado';
+  | 'Programado'
+  | 'Incidencia';
 
-export type FilterStatus = 'Todos' | PackageStatus;
-
-export type ServiceType = 'Express' | 'Estándar' | 'Same Day';
-
-export interface Customer {
-  id: string;
-  name: string;
-  address: string;
-  phone: string;
-}
-
-export interface Driver {
-  id: string;
-  name: string;
-  vehicle: string;
-  rating: number;
-}
-
-export interface DeliveryRoute {
-  id: string;
-  name: string;
-  origin: string;
-  destination: string;
-  stops: number;
-}
+export type ServiceType = 'Express' | 'Estándar' | 'Mismo día' | 'Internacional';
 
 export interface CourierPackage {
   id: string;
-  code: string;
-  serviceType: ServiceType;
+  trackingCode: string;
+  customerName: string;
+  destination: string;
+  driverName: string;
+  routeName: string;
   status: PackageStatus;
-  eta: string;
-  weight: string;
-  imageUrl: string;
-  customer: Customer;
-  driver: Driver;
-  route: DeliveryRoute;
+  serviceType: ServiceType;
+  estimatedDelivery: string;
+  weightKg: number;
 }

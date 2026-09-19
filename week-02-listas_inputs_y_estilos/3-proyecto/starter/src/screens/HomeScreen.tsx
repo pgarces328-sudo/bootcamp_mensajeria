@@ -1,228 +1,275 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TextInput,
   View,
 } from 'react-native';
 
 import { ItemCard } from '../components/ItemCard';
 import { packages } from '../data/mockData';
-import type { FilterStatus } from '../types';
-
-const filters: FilterStatus[] = [
-  'Todos',
-  'Pendiente',
-  'En tránsito',
-  'Entregado',
-  'Programado',
-];
+import {
+  BORDER_WIDTH,
+  COLORS,
+  INTERACTION,
+  RADIUS,
+  SPACING,
+  TYPOGRAPHY,
+} from '../theme';
+import type { CourierPackage } from '../types';
 
 export function HomeScreen() {
-  const [selectedFilter, setSelectedFilter] = useState<FilterStatus>('Todos');
+  const [searchText, setSearchText] = useState('');
 
-  const filteredPackages =
-    selectedFilter === 'Todos'
-      ? packages
-      : packages.filter((item) => item.status === selectedFilter);
+  const filteredPackages = useMemo(() => {
+    const normalizedSearch = searchText.trim().toLowerCase();
 
-  return (
-    <SafeAreaView style={styles.screen}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Mensajería Courier</Text>
-        <Text style={styles.headerSubtitle}>
-          Control operativo de paquetes, rutas, conductores y clientes
+    if (normalizedSearch.length === 0) {
+      return packages;
+    }
+
+    return packages.filter((item) => {
+      const searchableText = [
+        item.trackingCode,
+        item.customerName,
+        item.destination,
+        item.driverName,
+        item.routeName,
+        item.status,
+        item.serviceType,
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      return searchableText.includes(normalizedSearch);
+    });
+  }, [searchText]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: CourierPackage }) => <ItemCard item={item} />,
+    []
+  );
+
+  const keyExtractor = useCallback((item: CourierPackage) => item.id, []);
+
+  const renderSeparator = useCallback(
+    () => <View style={styles.separator} />,
+    []
+  );
+
+  const renderEmptyState = useCallback(
+    () => (
+      <View style={styles.emptyState}>
+        <Text style={styles.emptyIcon}>🔎</Text>
+        <Text style={styles.emptyTitle}>No se encontraron envíos</Text>
+        <Text style={styles.emptyText}>
+          Intenta buscar por código, cliente, conductor, ruta, destino o estado.
         </Text>
       </View>
+    ),
+    []
+  );
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.summaryRow}>
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>{packages.length}</Text>
-            <Text style={styles.summaryLabel}>Paquetes</Text>
-          </View>
+  const handleClearSearch = useCallback(() => {
+    setSearchText('');
+  }, []);
 
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>4</Text>
-            <Text style={styles.summaryLabel}>Rutas</Text>
-          </View>
-
-          <View style={styles.summaryCard}>
-            <Text style={styles.summaryValue}>4</Text>
-            <Text style={styles.summaryLabel}>Drivers</Text>
-          </View>
-        </View>
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Envíos activos</Text>
-          <Text style={styles.sectionCounter}>
-            {filteredPackages.length} resultados
+  return (
+    <KeyboardAvoidingView
+      style={styles.keyboardView}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <SafeAreaView style={styles.screen}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Mensajería Courier</Text>
+          <Text style={styles.headerSubtitle}>
+            Lista de paquetes con búsqueda en tiempo real
           </Text>
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.filtersContent}
-        >
-          {filters.map((filter) => {
-            const isActive = selectedFilter === filter;
+        <View style={styles.searchSection}>
+          <Text style={styles.searchLabel}>Buscar envío</Text>
 
-            return (
-              <TouchableOpacity
-                key={filter}
-                activeOpacity={0.75}
-                style={[
-                  styles.filterButton,
-                  isActive ? styles.filterButtonActive : null,
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Código, cliente, conductor, ruta o estado"
+            placeholderTextColor={COLORS.textMuted}
+            value={searchText}
+            onChangeText={setSearchText}
+            autoCapitalize="none"
+            autoCorrect={false}
+            returnKeyType="search"
+          />
+
+          <View style={styles.searchFooter}>
+            <Text style={styles.resultText}>
+              {filteredPackages.length} de {packages.length} envíos encontrados
+            </Text>
+
+            {searchText.length > 0 ? (
+              <Pressable
+                style={({ pressed }) => [
+                  styles.clearButton,
+                  pressed ? styles.clearButtonPressed : null,
                 ]}
-                onPress={() => setSelectedFilter(filter)}
+                onPress={handleClearSearch}
               >
-                <Text
-                  style={[
-                    styles.filterText,
-                    isActive ? styles.filterTextActive : null,
-                  ]}
-                >
-                  {filter}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                <Text style={styles.clearButtonText}>Limpiar</Text>
+              </Pressable>
+            ) : null}
+          </View>
+        </View>
 
-        {filteredPackages.map((item) => (
-          <ItemCard key={item.id} item={item} />
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+        <FlatList
+          data={filteredPackages}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          ItemSeparatorComponent={renderSeparator}
+          ListEmptyComponent={renderEmptyState}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[
+            styles.listContent,
+            filteredPackages.length === 0 ? styles.listContentEmpty : null,
+          ]}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  keyboardView: {
+    flex: 1,
+  },
+
   screen: {
     flex: 1,
-    backgroundColor: '#dae3eb',
+    backgroundColor: COLORS.background,
   },
 
   header: {
-    paddingTop: 48,
-    paddingHorizontal: 20,
-    paddingBottom: 22,
-    backgroundColor: '#1e293b',
-    borderBottomWidth: 1,
-    borderBottomColor: '#334155',
+    backgroundColor: COLORS.primary,
+    paddingTop: SPACING.xxxl,
+    paddingHorizontal: SPACING.xl,
+    paddingBottom: SPACING.xxl,
   },
 
   headerTitle: {
-    color: '#ffffff',
-    fontSize: 26,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontSize: TYPOGRAPHY.title,
+    fontWeight: TYPOGRAPHY.weightExtraBold,
   },
 
   headerSubtitle: {
-    color: '#cbd5e1',
-    fontSize: 14,
-    marginTop: 4,
-    lineHeight: 20,
+    color: COLORS.border,
+    fontSize: TYPOGRAPHY.body,
+    lineHeight: TYPOGRAPHY.lineHeightSubtitle,
+    marginTop: SPACING.xs,
   },
 
-  scroll: {
-    flex: 1,
+  searchSection: {
+    backgroundColor: COLORS.surface,
+    padding: SPACING.lg,
+    borderBottomWidth: BORDER_WIDTH.thin,
+    borderBottomColor: COLORS.border,
   },
 
-  scrollContent: {
-    padding: 16,
-    paddingBottom: 32,
+  searchLabel: {
+    fontSize: TYPOGRAPHY.caption,
+    fontWeight: TYPOGRAPHY.weightExtraBold,
+    color: COLORS.text,
+    marginBottom: SPACING.sm,
+    textTransform: 'uppercase',
   },
 
-  summaryRow: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 22,
+  searchInput: {
+    backgroundColor: COLORS.surfaceMuted,
+    borderWidth: BORDER_WIDTH.thin,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.md,
+    paddingHorizontal: SPACING.lg,
+    paddingVertical: SPACING.md,
+    fontSize: TYPOGRAPHY.body,
+    color: COLORS.text,
   },
 
-  summaryCard: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    borderRadius: 14,
-    paddingVertical: 14,
-    paddingHorizontal: 8,
-    alignItems: 'center',
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-
-  summaryValue: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#1e293b',
-  },
-
-  summaryLabel: {
-    marginTop: 4,
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#64748b',
-  },
-
-  sectionHeader: {
+  searchFooter: {
+    marginTop: SPACING.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    gap: SPACING.md,
   },
 
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#334155',
+  resultText: {
+    flex: 1,
+    fontSize: TYPOGRAPHY.caption,
+    fontWeight: TYPOGRAPHY.weightSemiBold,
+    color: COLORS.textMuted,
   },
 
-  sectionCounter: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#64748b',
+  clearButton: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: SPACING.md,
+    paddingVertical: SPACING.sm,
+    borderRadius: RADIUS.pill,
   },
 
-  filtersContent: {
-    gap: 8,
-    paddingBottom: 16,
+  clearButtonPressed: {
+    opacity: INTERACTION.pressedOpacity,
   },
 
-  filterButton: {
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+  clearButtonText: {
+    color: COLORS.white,
+    fontSize: TYPOGRAPHY.caption,
+    fontWeight: TYPOGRAPHY.weightExtraBold,
   },
 
-  filterButtonActive: {
-    backgroundColor: '#1e293b',
-    borderColor: '#1e293b',
+  listContent: {
+    padding: SPACING.lg,
+    paddingBottom: SPACING.xxxl,
   },
 
-  filterText: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#475569',
+  listContentEmpty: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
 
-  filterTextActive: {
-    color: '#ffffff',
+  separator: {
+    height: SPACING.lg,
+  },
+
+  emptyState: {
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.lg,
+    padding: SPACING.xxl,
+    alignItems: 'center',
+    borderWidth: BORDER_WIDTH.thin,
+    borderColor: COLORS.border,
+  },
+
+  emptyIcon: {
+    fontSize: 40,
+    marginBottom: SPACING.md,
+  },
+
+  emptyTitle: {
+    fontSize: TYPOGRAPHY.sectionTitle,
+    fontWeight: TYPOGRAPHY.weightExtraBold,
+    color: COLORS.text,
+    textAlign: 'center',
+  },
+
+  emptyText: {
+    marginTop: SPACING.sm,
+    fontSize: TYPOGRAPHY.body,
+    color: COLORS.textMuted,
+    textAlign: 'center',
+    lineHeight: TYPOGRAPHY.lineHeightBody,
   },
 });
