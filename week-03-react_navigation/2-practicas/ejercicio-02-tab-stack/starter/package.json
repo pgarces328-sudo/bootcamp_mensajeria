@@ -1,12 +1,11 @@
 {
-  "name": "mensajeria-courier-navigation",
+  "name": "ejercicio-02-tabs-stack",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "App.tsx",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "ios": "expo start --ios"
   },
   "dependencies": {
     "@expo/vector-icons": "15.1.1",
@@ -24,6 +23,5 @@
     "@babel/core": "7.29.7",
     "@types/react": "19.2.17",
     "typescript": "6.0.3"
-  },
-  "private": true
+  }
 }

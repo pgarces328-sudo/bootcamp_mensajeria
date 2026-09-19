@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import type { CourierPackage, PackageStatus } from '../types';
+import { drivers, routes } from '../data/mockData';
 import {
   BORDER_WIDTH,
   COLORS,
@@ -8,35 +8,38 @@ import {
   RADIUS,
   SHADOWS,
   SPACING,
-  TYPOGRAPHY,
+  TYPOGRAPHY
 } from '../theme';
+import type { CourierPackage, PackageStatus } from '../types';
 
-interface ItemCardProps {
+interface ShipmentCardProps {
   item: CourierPackage;
+  onPress: () => void;
 }
 
-export function ItemCard({ item }: ItemCardProps) {
-  const statusBadgeStyle = getStatusBadgeStyle(item.status);
-  const statusTextStyle = getStatusTextStyle(item.status);
+export function ShipmentCard({ item, onPress }: ShipmentCardProps) {
+  const driver = drivers.find((driverItem) => driverItem.id === item.driverId);
+  const route = routes.find((routeItem) => routeItem.id === item.routeId);
+
+  const badgeStyle = getStatusBadgeStyle(item.status);
+  const textStyle = getStatusTextStyle(item.status);
 
   return (
     <Pressable
       style={({ pressed }) => [
         styles.card,
-        pressed ? styles.cardPressed : null,
+        pressed ? styles.cardPressed : null
       ]}
-      onPress={() => console.log(`Paquete seleccionado: ${item.trackingCode}`)}
+      onPress={onPress}
     >
-      <View style={styles.cardHeader}>
+      <View style={styles.header}>
         <View style={styles.titleBlock}>
-          <Text style={styles.trackingCode}>{item.trackingCode}</Text>
-          <Text style={styles.serviceType}>{item.serviceType}</Text>
+          <Text style={styles.code}>{item.trackingCode}</Text>
+          <Text style={styles.service}>{item.serviceType}</Text>
         </View>
 
-        <View style={[styles.statusBadge, statusBadgeStyle]}>
-          <Text style={[styles.statusText, statusTextStyle]}>
-            {item.status}
-          </Text>
+        <View style={[styles.badge, badgeStyle]}>
+          <Text style={[styles.badgeText, textStyle]}>{item.status}</Text>
         </View>
       </View>
 
@@ -53,12 +56,12 @@ export function ItemCard({ item }: ItemCardProps) {
 
         <Text style={styles.infoText} numberOfLines={1}>
           <Text style={styles.label}>Conductor: </Text>
-          {item.driverName}
+          {driver?.name ?? 'Sin asignar'}
         </Text>
 
         <Text style={styles.infoText} numberOfLines={1}>
           <Text style={styles.label}>Ruta: </Text>
-          {item.routeName}
+          {route?.name ?? 'Sin ruta'}
         </Text>
       </View>
 
@@ -126,129 +129,129 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     borderWidth: BORDER_WIDTH.thin,
     borderColor: COLORS.border,
-    ...SHADOWS.card,
+    ...SHADOWS.card
   },
 
   cardPressed: {
     opacity: INTERACTION.pressedOpacity,
-    transform: [{ scale: INTERACTION.pressedScale }],
+    transform: [{ scale: INTERACTION.pressedScale }]
   },
 
-  cardHeader: {
+  header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: SPACING.md,
+    gap: SPACING.md
   },
 
   titleBlock: {
-    flex: 1,
+    flex: 1
   },
 
-  trackingCode: {
+  code: {
     fontSize: TYPOGRAPHY.cardTitle,
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text,
+    color: COLORS.text
   },
 
-  serviceType: {
+  service: {
     marginTop: SPACING.xs,
     fontSize: TYPOGRAPHY.caption,
     fontWeight: TYPOGRAPHY.weightBold,
-    color: COLORS.accent,
+    color: COLORS.accent
   },
 
-  statusBadge: {
+  badge: {
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.pill,
+    borderRadius: RADIUS.pill
   },
 
-  statusText: {
+  badgeText: {
     fontSize: TYPOGRAPHY.small,
-    fontWeight: TYPOGRAPHY.weightExtraBold,
+    fontWeight: TYPOGRAPHY.weightExtraBold
   },
 
   badgeDelivered: {
-    backgroundColor: COLORS.successBackground,
+    backgroundColor: COLORS.successBackground
   },
 
   badgeInTransit: {
-    backgroundColor: COLORS.infoBackground,
+    backgroundColor: COLORS.infoBackground
   },
 
   badgePending: {
-    backgroundColor: COLORS.warningBackground,
+    backgroundColor: COLORS.warningBackground
   },
 
   badgeScheduled: {
-    backgroundColor: COLORS.purpleBackground,
+    backgroundColor: COLORS.purpleBackground
   },
 
   badgeIncident: {
-    backgroundColor: COLORS.dangerBackground,
+    backgroundColor: COLORS.dangerBackground
   },
 
   textDelivered: {
-    color: COLORS.successText,
+    color: COLORS.successText
   },
 
   textInTransit: {
-    color: COLORS.infoText,
+    color: COLORS.infoText
   },
 
   textPending: {
-    color: COLORS.warningText,
+    color: COLORS.warningText
   },
 
   textScheduled: {
-    color: COLORS.purpleText,
+    color: COLORS.purpleText
   },
 
   textIncident: {
-    color: COLORS.dangerText,
+    color: COLORS.dangerText
   },
 
   infoBlock: {
     marginTop: SPACING.lg,
-    gap: SPACING.sm,
+    gap: SPACING.sm
   },
 
   infoText: {
     fontSize: TYPOGRAPHY.body,
     lineHeight: TYPOGRAPHY.lineHeightBody,
-    color: COLORS.textMuted,
+    color: COLORS.textMuted
   },
 
   label: {
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text,
+    color: COLORS.text
   },
 
   metaRow: {
-    flexDirection: 'row',
-    gap: SPACING.md,
     marginTop: SPACING.lg,
+    flexDirection: 'row',
+    gap: SPACING.md
   },
 
   metaBox: {
     flex: 1,
     backgroundColor: COLORS.surfaceMuted,
     borderRadius: RADIUS.md,
-    padding: SPACING.md,
+    padding: SPACING.md
   },
 
   metaLabel: {
     fontSize: TYPOGRAPHY.small,
     fontWeight: TYPOGRAPHY.weightExtraBold,
     color: COLORS.textMuted,
-    textTransform: 'uppercase',
+    textTransform: 'uppercase'
   },
 
   metaValue: {
     marginTop: SPACING.xs,
     fontSize: TYPOGRAPHY.caption,
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text,
-  },
+    color: COLORS.text
+  }
 });

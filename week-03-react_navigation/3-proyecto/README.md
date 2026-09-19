@@ -1,17 +1,19 @@
-# Proyecto Semana 02 — App de Listas con Búsqueda
+# Proyecto Semana 03 — React Navigation
 
-Semana 02 — Listas, Inputs y Estilos  
-Fase 1 — Fundamentos React Native
+## Mensajería Courier — Navegación multipantalla
+
+Semana 03 — React Navigation 7  
+Fase 2 — Core React Native
 
 ---
 
 ## 🎯 Objetivo
 
-Construir una app móvil que combine `FlatList` con `TextInput` para listar y filtrar elementos del dominio asignado. Además, se aplican temas visuales consistentes usando constantes de estilo como `COLORS`, `TYPOGRAPHY`, `SPACING`, `RADIUS` y otras definiciones reutilizables.
+Construir una aplicación móvil multipantalla usando React Navigation 7.
 
-En este proyecto, el dominio asignado es **Empresa de mensajería / Courier**. La app muestra una lista de paquetes registrados en una operación de mensajería y permite buscar en tiempo real por código, cliente, conductor, ruta, destino, estado o tipo de servicio.
+El objetivo de este proyecto es implementar una navegación real dentro de la app de **Mensajería Courier**, usando un `Tab Navigator` para separar las secciones principales y un `Stack Navigator` anidado para navegar desde una lista de envíos hacia una pantalla de detalle.
 
-El objetivo principal de esta semana es mejorar la app construida en la Semana 01. En lugar de renderizar tarjetas con una lista simple, ahora se usa `FlatList`, que es más adecuado para listas dinámicas o con mayor cantidad de elementos. También se agrega un campo de búsqueda con `TextInput` para mejorar la interacción del usuario.
+Esta semana la app evoluciona desde una pantalla única hacia una estructura con navegación entre pantallas, manteniendo el dominio asignado de empresa de mensajería / courier.
 
 ---
 
@@ -19,196 +21,298 @@ El objetivo principal de esta semana es mejorar la app construida en la Semana 0
 
 **Empresa de mensajería / Courier**
 
-Este dominio representa una empresa encargada de gestionar envíos, paquetes, rutas de entrega, conductores y clientes destinatarios.
+La app representa una operación básica de mensajería en la que se gestionan:
 
-En la app, cada elemento de la lista representa un paquete o envío. Cada paquete contiene información operativa útil para consultar rápidamente su estado dentro del flujo logístico.
+- Paquetes o envíos.
+- Conductores.
+- Rutas de entrega.
+- Estados operativos de los paquetes.
 
 ---
 
 ## 📦 Descripción del proyecto
 
-**Mensajería Courier** es una aplicación móvil de pantalla única construida con React Native y Expo.
+**Mensajería Courier** es una aplicación móvil que permite navegar entre diferentes secciones de una empresa de mensajería.
 
-La pantalla principal permite consultar una lista de paquetes de una empresa de mensajería. Cada paquete se muestra mediante una tarjeta reutilizable que contiene datos como el código de seguimiento, cliente, destino, conductor, ruta, estado, tipo de servicio, ETA y peso.
+La app cuenta con una barra de navegación inferior con tres secciones principales:
 
-La app incluye un campo de búsqueda en la parte superior. Mientras el usuario escribe, la lista se filtra automáticamente en tiempo real. Esto permite encontrar rápidamente un envío específico sin recorrer toda la lista manualmente.
+- **Envíos**
+- **Drivers**
+- **Rutas**
 
-La búsqueda funciona sobre varios campos del dominio:
+En la sección **Envíos**, el usuario puede ver una lista de paquetes activos. Al seleccionar un envío, la app navega hacia una pantalla de detalle donde se muestra información completa del paquete seleccionado.
 
-- Código del paquete.
-- Nombre del cliente.
-- Dirección o destino.
-- Nombre del conductor.
-- Ruta asignada.
-- Estado del envío.
-- Tipo de servicio.
+La navegación de la app combina:
 
-Si la búsqueda no encuentra coincidencias, la app muestra un estado vacío personalizado indicando que no se encontraron envíos. Esto mejora la experiencia de usuario y evita que la pantalla quede vacía sin explicación.
+- `NavigationContainer`
+- `Bottom Tab Navigator`
+- `Native Stack Navigator`
+- Navegación anidada
+- Parámetros tipados con TypeScript
 
 ---
 
-## 🧩 Entidad principal
+## 🧭 Navegación implementada
 
-La entidad principal del proyecto es:
+La app usa un `Tab Navigator` como navegación principal.
 
-**CourierPackage**
+```txt
+Tab Navigator
+├── Envíos
+├── Drivers
+└── Rutas
+```
 
-Esta interfaz representa un paquete o envío dentro del sistema de mensajería.
+Dentro del tab **Envíos** se implementa un `Stack Navigator` anidado:
 
-Campos usados:
+```txt
+Envíos Tab
+└── Stack Navigator
+    ├── ShipmentsList
+    └── ShipmentDetail
+```
 
-- `id`: identificador único del paquete.
-- `trackingCode`: código de seguimiento del envío.
-- `customerName`: nombre del cliente o destinatario.
-- `destination`: dirección o destino de entrega.
-- `driverName`: conductor asignado.
-- `routeName`: ruta de entrega.
-- `status`: estado actual del paquete.
-- `serviceType`: tipo de servicio contratado.
-- `estimatedDelivery`: hora o fecha estimada de entrega.
-- `weightKg`: peso del paquete en kilogramos.
+Esto permite navegar desde la lista de envíos hacia el detalle de un envío sin perder la barra inferior de tabs.
+
+---
+
+## 🧩 Pantallas de la app
+
+### Envíos
+
+Pantalla principal de paquetes.
+
+Muestra una lista de envíos con información como:
+
+- Código del paquete.
+- Cliente.
+- Destino.
+- Conductor asignado.
+- Ruta.
+- Estado.
+- ETA.
+- Peso.
+
+Al tocar una tarjeta, se navega hacia la pantalla de detalle.
+
+---
+
+### Detalle del envío
+
+Pantalla de detalle de un paquete seleccionado.
+
+Recibe el parámetro `id` desde la pantalla de lista y busca la información correspondiente del envío.
+
+Muestra:
+
+- Código del paquete.
+- Tipo de servicio.
+- Cliente.
+- Dirección.
+- Estado.
+- ETA.
+- Conductor.
+- Vehículo.
+- Ruta.
+- Origen y destino.
+- Peso.
+- Número de paradas.
+
+---
+
+### Drivers
+
+Pantalla que muestra los conductores registrados en la operación.
+
+Cada conductor muestra:
+
+- Nombre.
+- Vehículo asignado.
+- Calificación.
+- Número de envíos activos.
+
+---
+
+### Rutas
+
+Pantalla que muestra las rutas de entrega.
+
+Cada ruta muestra:
+
+- Nombre de la ruta.
+- Origen.
+- Destino.
+- Número de paradas.
+- Estado de la ruta.
+
+---
+
+## 🧱 Entidades del dominio
+
+### CourierPackage
+
+Representa un paquete o envío.
+
+Campos principales:
+
+- `id`
+- `trackingCode`
+- `customerName`
+- `destination`
+- `driverId`
+- `routeId`
+- `status`
+- `serviceType`
+- `estimatedDelivery`
+- `weightKg`
+- `stops`
+
+---
+
+### Driver
+
+Representa un conductor.
+
+Campos principales:
+
+- `id`
+- `name`
+- `vehicle`
+- `rating`
+- `activeShipments`
+
+---
+
+### DeliveryRoute
+
+Representa una ruta de entrega.
+
+Campos principales:
+
+- `id`
+- `name`
+- `origin`
+- `destination`
+- `stops`
+- `status`
 
 ---
 
 ## ✅ Requisitos cumplidos
 
-- Lista principal usando `FlatList`.
-- Mínimo 10 items del dominio.
-- Búsqueda en tiempo real usando `TextInput`.
-- Filtrado case-insensitive.
-- Estado vacío personalizado cuando no hay resultados.
-- Componente reutilizable `ItemCard`.
-- Uso de `KeyboardAvoidingView`.
-- Estilos basados en constantes desde `src/theme/index.ts`.
-- `keyExtractor` usando el `id` del item.
-- Filtrado con `useMemo`.
-- `renderItem`, `keyExtractor`, separador y estado vacío con `useCallback`.
-- Separador visual entre tarjetas con `ItemSeparatorComponent`.
-- Código TypeScript sin uso de `any`.
+- App multipantalla usando React Navigation.
+- `NavigationContainer` configurado correctamente.
+- `Tab Navigator` con 3 tabs adaptadas al dominio.
+- `Stack Navigator` anidado dentro del tab de Envíos.
+- Pantalla de lista de envíos.
+- Pantalla de detalle de envío.
+- Parámetro `id` enviado desde la lista hacia el detalle.
+- Parámetros tipados con TypeScript.
+- Headers con títulos descriptivos del dominio.
+- Íconos en la tab bar usando `@expo/vector-icons`.
+- App adaptada al dominio de mensajería / courier.
+- TypeScript sin uso de `any`.
+- App funcional en Expo.
 
 ---
 
-## 🧱 Core Components usados
+## 🧠 Conceptos aplicados
 
-- `View`
-- `Text`
-- `TextInput`
-- `FlatList`
-- `Pressable`
-- `SafeAreaView`
-- `KeyboardAvoidingView`
-- `StyleSheet.create`
+### NavigationContainer
 
-Estos componentes permiten construir la interfaz usando únicamente herramientas nativas de React Native, sin librerías externas de UI.
-
----
-
-## 🔎 Funcionalidad de búsqueda
-
-La búsqueda se realiza en tiempo real. Cada vez que el usuario escribe en el `TextInput`, el estado `searchText` se actualiza y la lista filtrada se recalcula.
-
-La lógica de filtrado se implementa con `useMemo`, lo que permite evitar cálculos innecesarios en cada renderizado.
-
-La búsqueda no distingue entre mayúsculas y minúsculas, porque tanto el texto ingresado como los campos del paquete se normalizan con `toLowerCase()`.
-
-Ejemplos de búsqueda:
-
-```txt
-ENV-5019
-Carlos
-Entregado
-Ruta Norte
-Express
-```
-
-Si no hay coincidencias, se muestra el mensaje:
-
-```txt
-No se encontraron envíos
-```
-
----
-
-## 📋 Uso de FlatList
-
-La lista principal del proyecto usa `FlatList`, no `ScrollView`.
-
-`FlatList` es más adecuado para listas con varios elementos porque está optimizado para renderizar listas de datos. Además, permite usar propiedades específicas como:
-
-- `data`
-- `renderItem`
-- `keyExtractor`
-- `ItemSeparatorComponent`
-- `ListEmptyComponent`
-- `contentContainerStyle`
-
-En este proyecto, `keyExtractor` usa el campo `id` del paquete:
+Se usa como contenedor principal de navegación.
 
 ```tsx
-const keyExtractor = useCallback((item: CourierPackage) => item.id, []);
+<NavigationContainer>
+  ...
+</NavigationContainer>
 ```
-
-No se usa el índice del array como key.
 
 ---
 
-## 🎨 Theming
+### Tab Navigator
 
-Los estilos usan constantes definidas en:
+Permite separar la app en secciones principales.
 
 ```txt
-src/theme/index.ts
+Envíos | Drivers | Rutas
 ```
-
-Constantes usadas:
-
-- `COLORS`
-- `TYPOGRAPHY`
-- `SPACING`
-- `RADIUS`
-- `BORDER_WIDTH`
-- `INTERACTION`
-- `SHADOWS`
-
-El uso de constantes permite mantener una identidad visual consistente en toda la app. También facilita modificar colores, tamaños o espaciados desde un solo lugar sin tener que cambiar cada componente manualmente.
 
 ---
 
-## 🎨 Decisiones de diseño
+### Stack Navigator
 
-Se mantuvo una paleta sobria en tonos azules, grises y blancos para representar un entorno logístico y operativo.
+Permite navegar entre pantallas relacionadas.
 
-Las tarjetas tienen fondo blanco para destacar sobre el fondo general de la pantalla. Los estados del paquete usan colores diferentes para facilitar la lectura rápida:
+```txt
+Lista de envíos → Detalle del envío
+```
 
-- Verde para entregado.
-- Azul para en tránsito.
-- Amarillo para pendiente.
-- Morado para programado.
-- Rojo para incidencia.
+---
 
-El campo de búsqueda se ubicó antes de la lista para que el usuario pueda filtrar inmediatamente los envíos. También se incluye un botón **Limpiar** cuando hay texto escrito, permitiendo reiniciar la búsqueda fácilmente.
+### Navegación anidada
+
+Se usa un Stack Navigator dentro de una tab.
+
+Esto permite que el tab **Envíos** tenga su propio historial de navegación sin perder la barra inferior.
+
+---
+
+### Params tipados
+
+El detalle del envío recibe un `id` tipado.
+
+```ts
+export type ShipmentsStackParamList = {
+  ShipmentsList: undefined;
+  ShipmentDetail: {
+    id: string;
+  };
+};
+```
+
+La navegación se realiza así:
+
+```tsx
+navigation.navigate('ShipmentDetail', {
+  id: item.id,
+});
+```
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```txt
-starter/
-├── App.tsx
-├── app.json
-├── package.json
-├── tsconfig.json
-└── src/
-    ├── types/
-    │   └── index.ts
-    ├── data/
-    │   └── mockData.ts
-    ├── components/
-    │   └── ItemCard.tsx
-    ├── screens/
-    │   └── HomeScreen.tsx
-    └── theme/
-        └── index.ts
+3-proyecto/
+├── README.md
+├── screenshots/
+└── starter/
+    ├── App.tsx
+    ├── app.json
+    ├── index.ts
+    ├── package.json
+    ├── pnpm-lock.yaml
+    ├── tsconfig.json
+    ├── assets/
+    └── src/
+        ├── components/
+        │   └── ShipmentCard.tsx
+        ├── data/
+        │   └── mockData.ts
+        ├── navigation/
+        │   ├── AppNavigator.tsx
+        │   ├── ShipmentsStackNavigator.tsx
+        │   └── types.ts
+        ├── screens/
+        │   ├── ShipmentsScreen.tsx
+        │   ├── ShipmentDetailScreen.tsx
+        │   ├── DriversScreen.tsx
+        │   └── RoutesScreen.tsx
+        ├── theme/
+        │   └── index.ts
+        └── types/
+            └── index.ts
 ```
 
 ---
@@ -217,45 +321,95 @@ starter/
 
 ### `App.tsx`
 
-Punto de entrada de la app. Renderiza la pantalla principal `HomeScreen`.
+Punto de entrada visual de la app. Renderiza `AppNavigator`.
 
-### `src/screens/HomeScreen.tsx`
+---
 
-Contiene la pantalla principal. Aquí se implementa:
+### `src/navigation/AppNavigator.tsx`
 
-- Header.
-- `TextInput` de búsqueda.
-- Lógica de filtrado.
-- `FlatList`.
-- Estado vacío.
-- Manejo del teclado.
+Configura el `NavigationContainer` y el `Bottom Tab Navigator`.
 
-### `src/components/ItemCard.tsx`
+Define los tabs principales:
 
-Componente reutilizable que muestra la información de cada paquete.
+- Envíos
+- Drivers
+- Rutas
 
-Cada tarjeta muestra varios campos del dominio:
+También configura los íconos de cada tab.
 
-- Código.
-- Cliente.
-- Destino.
-- Conductor.
-- Ruta.
-- Estado.
-- ETA.
-- Peso.
+---
+
+### `src/navigation/ShipmentsStackNavigator.tsx`
+
+Configura el Stack Navigator anidado para el tab de Envíos.
+
+Incluye:
+
+- `ShipmentsList`
+- `ShipmentDetail`
+
+---
+
+### `src/navigation/types.ts`
+
+Contiene los tipos de navegación:
+
+- `RootTabParamList`
+- `ShipmentsStackParamList`
+
+---
+
+### `src/screens/ShipmentsScreen.tsx`
+
+Pantalla que muestra la lista de envíos.
+
+Cada tarjeta permite navegar al detalle del paquete.
+
+---
+
+### `src/screens/ShipmentDetailScreen.tsx`
+
+Pantalla que recibe el parámetro `id` y muestra la información completa del envío seleccionado.
+
+---
+
+### `src/screens/DriversScreen.tsx`
+
+Pantalla que muestra los conductores de la operación.
+
+---
+
+### `src/screens/RoutesScreen.tsx`
+
+Pantalla que muestra las rutas de entrega.
+
+---
+
+### `src/components/ShipmentCard.tsx`
+
+Componente reutilizable para mostrar una tarjeta resumida de un envío.
+
+---
 
 ### `src/data/mockData.ts`
 
-Contiene los datos simulados del dominio. Incluye más de 10 paquetes para cumplir el requisito de la semana.
+Contiene los datos simulados de:
 
-### `src/types/index.ts`
+- paquetes
+- conductores
+- rutas
 
-Contiene los tipos e interfaces TypeScript del dominio.
+---
 
 ### `src/theme/index.ts`
 
-Contiene constantes visuales reutilizables para estilos.
+Contiene constantes visuales reutilizables:
+
+- colores
+- tipografía
+- espaciados
+- bordes
+- sombras
 
 ---
 
@@ -275,88 +429,109 @@ También se puede ejecutar con:
 npx expo start
 ```
 
-Luego se puede abrir la app en:
-
-- Expo Go.
-- Emulador Android.
-- Simulador iOS.
-- Navegador web si Expo lo permite.
-
 ---
 
 ## 🧪 Pruebas sugeridas
 
-Buscar por código:
+Al ejecutar la app, verificar:
 
-```txt
-ENV-5019
-```
-
-Buscar por cliente:
-
-```txt
-Laura
-```
-
-Buscar por conductor:
-
-```txt
-Carlos
-```
-
-Buscar por estado:
-
-```txt
-Entregado
-```
-
-Buscar por tipo de servicio:
-
-```txt
-Express
-```
-
-Buscar un texto inexistente:
-
-```txt
-xxxxx
-```
-
-Debe mostrarse el estado vacío:
-
-```txt
-No se encontraron envíos
-```
+1. La app abre sin errores.
+2. Se muestra la tab bar inferior.
+3. Existen las tabs:
+   - Envíos
+   - Drivers
+   - Rutas
+4. En la tab Envíos se muestra una lista de paquetes.
+5. Al tocar un paquete, se abre la pantalla **Detalle del envío**.
+6. La pantalla de detalle muestra información del paquete seleccionado.
+7. El botón **Volver a envíos** funciona.
+8. La tab bar sigue visible al navegar al detalle.
+9. Las pantallas Drivers y Rutas muestran información coherente al dominio.
 
 ---
 
 ## 📸 Evidencia
 
-Agregar captura o grabación de la app funcionando en Expo Go, emulador o navegador.
+Las capturas deben guardarse en:
 
-La evidencia debe mostrar:
+```txt
+3-proyecto/screenshots/
+```
 
+Capturas sugeridas:
+
+```txt
+app-envios.png
+app-detalle-envio.png
+app-tabs.png
+```
+
+### `app-envios.png`
+
+Debe mostrar:
+
+- Tab Envíos.
 - Lista de paquetes.
-- Input de búsqueda.
-- Resultados filtrados.
-- Estado vacío cuando no hay coincidencias.
+- Tarjetas de envíos.
+- Tab bar inferior visible.
+
+---
+
+### `app-detalle-envio.png`
+
+Debe mostrar:
+
+- Pantalla Detalle del envío.
+- Código del paquete.
+- Cliente.
+- Estado.
+- Conductor.
+- Ruta.
+- Botón para volver.
+- Tab bar inferior visible.
+
+---
+
+### `app-tabs.png`
+
+Debe mostrar:
+
+- Tab Drivers o Rutas.
+- Información del dominio.
+- Tab bar inferior visible.
 
 ---
 
 ## 📌 Restricciones cumplidas
 
-- No se usó `ScrollView` para la lista principal.
-- No se usó el índice del array como key.
 - No se usó `any`.
-- No se usaron librerías externas de UI.
-- Los estilos están definidos con `StyleSheet.create`.
-- El layout está construido con Flexbox.
-- El proyecto está adaptado al dominio asignado.
+- Los parámetros de navegación están tipados.
+- La app usa `NavigationContainer`.
+- El Stack recibe parámetros entre pantallas.
+- La app está adaptada al dominio asignado.
+- No se copiaron datos genéricos sin contexto.
+- La navegación es funcional en Expo.
 
 ---
 
 ## ✅ Resultado esperado
 
-Al ejecutar la app se muestra una pantalla de consulta de envíos para una empresa de mensajería.
+Al ejecutar la app se muestra una aplicación de mensajería organizada por navegación inferior.
 
-El usuario puede revisar la lista de paquetes, buscar en tiempo real, consultar los datos principales de cada envío y recibir un mensaje claro cuando no hay resultados para la búsqueda realizada.
+El usuario puede:
+
+- Ver la lista de envíos.
+- Entrar al detalle de un envío.
+- Consultar conductores.
+- Consultar rutas.
+- Navegar entre tabs.
+- Mantener la barra inferior visible durante la navegación dentro del Stack.
+
+Este proyecto demuestra el uso práctico de React Navigation 7 con:
+
+- Tab Navigator.
+- Stack Navigator.
+- Navegación anidada.
+- Parámetros tipados.
+- Headers descriptivos.
+- Dominio adaptado a Mensajería Courier.

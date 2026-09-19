@@ -6,7 +6,6 @@ export const COLORS = {
   primary: '#1E293B',
   primaryLight: '#334155',
   accent: '#2563EB',
-  accentLight: '#DBEAFE',
 
   text: '#0F172A',
   textMuted: '#64748B',
@@ -26,11 +25,11 @@ export const COLORS = {
   purpleText: '#6D28D9',
 
   dangerBackground: '#FEE2E2',
-  dangerText: '#991B1B',
+  dangerText: '#991B1B'
 };
 
 export const TYPOGRAPHY = {
-  title: 28,
+  title: 26,
   sectionTitle: 20,
   cardTitle: 18,
   body: 14,
@@ -45,7 +44,7 @@ export const TYPOGRAPHY = {
   weightMedium: '500' as const,
   weightSemiBold: '600' as const,
   weightBold: '700' as const,
-  weightExtraBold: '800' as const,
+  weightExtraBold: '800' as const
 };
 
 export const SPACING = {
@@ -56,7 +55,7 @@ export const SPACING = {
   lg: 16,
   xl: 20,
   xxl: 24,
-  xxxl: 32,
+  xxxl: 32
 };
 
 export const RADIUS = {
@@ -64,16 +63,16 @@ export const RADIUS = {
   md: 12,
   lg: 16,
   xl: 20,
-  pill: 999,
+  pill: 999
 };
 
 export const BORDER_WIDTH = {
-  thin: 1,
+  thin: 1
 };
 
 export const INTERACTION = {
   pressedOpacity: 0.85,
-  pressedScale: 0.99,
+  pressedScale: 0.99
 };
 
 export const SHADOWS = {
@@ -81,10 +80,10 @@ export const SHADOWS = {
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.08,
     shadowRadius: 8,
-    elevation: 3,
-  },
+    elevation: 3
+  }
 };
