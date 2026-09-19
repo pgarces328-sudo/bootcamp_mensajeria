@@ -1,12 +1,3 @@
-Sí, claro. Este sería el **README de Semana 01** con el mismo estilo más completo que te gustó del de Semana 02, pero adaptado correctamente a lo que pedía la **Semana 01: Core Components y Flexbox**.
-
-Pégalo en:
-
-```txt
-week-01-core_components_y_flexbox/3-proyecto/README.md
-```
-
-````md
 # Proyecto Semana 01 — App de Tarjetas
 
 Semana 01 — Core Components y Flexbox  
@@ -368,4 +359,3 @@ Este proyecto demuestra el uso práctico de los fundamentos de React Native trab
 - Componentes reutilizables.
 - TypeScript.
 - Adaptación a un dominio real.
-````
