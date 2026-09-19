@@ -3,255 +3,167 @@
 // ============================================================
 
 import React from 'react';
-import {
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, StatusBar } from 'react-native';
 
 export default function App(): React.JSX.Element {
   return (
-    <SafeAreaView style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.mainTitle}>Flexbox Layouts</Text>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.scroll}>
+      <StatusBar barStyle="light-content" backgroundColor="#0d1117" />
 
-        <View style={styles.demoSection}>
-          <Text style={styles.sectionTitle}>Layout 1: Header</Text>
-
-          <View style={styles.headerLayout}>
-            <Text style={styles.headerTitle}>Inicio</Text>
-
-            <Pressable
-              style={({ pressed }) => [
-                styles.headerButton,
-                pressed ? styles.buttonPressed : null,
-              ]}
-              onPress={() => console.log('Nuevo elemento')}
-            >
-              <Text style={styles.headerButtonText}>+ Nuevo</Text>
-            </Pressable>
-          </View>
+      {/* LAYOUT 1 — Header / Body / Footer */}
+      <Text style={styles.sectionTitle}>1. Header / Body / Footer</Text>
+      <View style={styles.layout1}>
+        <View style={styles.header}>
+          <Text style={styles.boxText}>Header</Text>
         </View>
-
-        <View style={styles.demoSection}>
-          <Text style={styles.sectionTitle}>Layout 2: Tarjetas resumen</Text>
-
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryCard}>
-              <Text style={styles.summaryValue}>12</Text>
-              <Text style={styles.summaryLabel}>Paquetes</Text>
-            </View>
-
-            <View style={styles.summaryCard}>
-              <Text style={styles.summaryValue}>4</Text>
-              <Text style={styles.summaryLabel}>Rutas</Text>
-            </View>
-
-            <View style={styles.summaryCard}>
-              <Text style={styles.summaryValue}>6</Text>
-              <Text style={styles.summaryLabel}>Drivers</Text>
-            </View>
-          </View>
+        <View style={styles.body}>
+          <Text style={styles.boxText}>Body (flex: 1)</Text>
         </View>
-
-        <View style={styles.demoSection}>
-          <Text style={styles.sectionTitle}>Layout 3: Tarjeta horizontal</Text>
-
-          <View style={styles.horizontalCard}>
-            <View style={styles.iconBox}>
-              <Text style={styles.iconText}>🚚</Text>
-            </View>
-
-            <View style={styles.cardInfo}>
-              <Text style={styles.cardTitle}>Ruta Norte-A</Text>
-              <Text style={styles.cardSubtitle}>8 entregas pendientes</Text>
-            </View>
-
-            <Text style={styles.cardStatus}>Activa</Text>
-          </View>
+        <View style={styles.footer}>
+          <Text style={styles.boxText}>Footer</Text>
         </View>
+      </View>
 
-        <View style={styles.demoSection}>
-          <Text style={styles.sectionTitle}>Layout 4: Navegación inferior</Text>
-
-          <View style={styles.bottomNav}>
-            <View style={styles.navItem}>
-              <Text style={styles.navIcon}>🏠</Text>
-              <Text style={styles.navLabel}>Inicio</Text>
-            </View>
-
-            <View style={styles.navItem}>
-              <Text style={styles.navIcon}>📦</Text>
-              <Text style={styles.navLabel}>Envíos</Text>
-            </View>
-
-            <View style={styles.navItem}>
-              <Text style={styles.navIcon}>👤</Text>
-              <Text style={styles.navLabel}>Perfil</Text>
-            </View>
-          </View>
+      {/* LAYOUT 2 — Columnas iguales */}
+      <Text style={styles.sectionTitle}>2. Columnas iguales</Text>
+      <View style={styles.layout2}>
+        <View style={styles.col}>
+          <Text style={styles.boxText}>1</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View style={styles.col}>
+          <Text style={styles.boxText}>2</Text>
+        </View>
+        <View style={styles.col}>
+          <Text style={styles.boxText}>3</Text>
+        </View>
+      </View>
+
+      {/* LAYOUT 3 — Sidebar + contenido */}
+      <Text style={styles.sectionTitle}>3. Sidebar + contenido</Text>
+      <View style={styles.layout3}>
+        <View style={styles.sidebar}>
+          <Text style={styles.boxText}>80</Text>
+        </View>
+        <View style={styles.content}>
+          <Text style={styles.boxText}>flex: 1</Text>
+        </View>
+      </View>
+
+      {/* LAYOUT 4 — Grid 2x2 */}
+      <Text style={styles.sectionTitle}>4. Grid 2x2</Text>
+      <View style={styles.layout4}>
+        <View style={styles.gridItem}>
+          <Text style={styles.boxText}>A</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.boxText}>B</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.boxText}>C</Text>
+        </View>
+        <View style={styles.gridItem}>
+          <Text style={styles.boxText}>D</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: '#0d1117',
   },
-
-  content: {
-    padding: 20,
-    gap: 20,
-  },
-
-  mainTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#ffffff',
-  },
-
-  demoSection: {
-    backgroundColor: '#1e293b',
-    borderRadius: 18,
+  scroll: {
     padding: 16,
     gap: 12,
   },
-
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#e2e8f0',
+    color: '#61DAFB',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginTop: 12,
   },
-
-  headerLayout: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#334155',
-    borderRadius: 14,
-    padding: 14,
-  },
-
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '800',
+  boxText: {
     color: '#ffffff',
-  },
-
-  headerButton: {
-    backgroundColor: '#38bdf8',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 999,
-  },
-
-  buttonPressed: {
-    opacity: 0.7,
-  },
-
-  headerButtonText: {
     fontSize: 13,
-    fontWeight: '800',
-    color: '#0f172a',
+    fontWeight: '600',
   },
 
-  summaryRow: {
-    flexDirection: 'row',
-    gap: 10,
+  // LAYOUT 1 — columna con body flexible
+  layout1: {
+    height: 220,
+    borderWidth: 1,
+    borderColor: '#30363d',
+    borderRadius: 8,
+    overflow: 'hidden',
   },
-
-  summaryCard: {
+  header: {
+    height: 50,
+    backgroundColor: '#1f6feb',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  body: {
     flex: 1,
-    backgroundColor: '#334155',
-    borderRadius: 14,
-    paddingVertical: 14,
+    backgroundColor: '#161b22',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-
-  summaryValue: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#38bdf8',
-  },
-
-  summaryLabel: {
-    marginTop: 4,
-    fontSize: 12,
-    color: '#cbd5e1',
-    fontWeight: '700',
-  },
-
-  horizontalCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#334155',
-    borderRadius: 14,
-    padding: 14,
-    gap: 12,
-  },
-
-  iconBox: {
-    width: 52,
-    height: 52,
-    borderRadius: 16,
-    backgroundColor: '#dbeafe',
+  footer: {
+    height: 50,
+    backgroundColor: '#238636',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  iconText: {
-    fontSize: 26,
-  },
-
-  cardInfo: {
-    flex: 1,
-  },
-
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: '#ffffff',
-  },
-
-  cardSubtitle: {
-    marginTop: 4,
-    fontSize: 13,
-    color: '#cbd5e1',
-  },
-
-  cardStatus: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#22c55e',
-  },
-
-  bottomNav: {
+  // LAYOUT 2 — tres columnas de igual ancho
+  layout2: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    height: 90,
+    gap: 8,
+  },
+  col: {
+    flex: 1,
+    backgroundColor: '#161b22',
+    borderRadius: 8,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#334155',
-    borderRadius: 14,
-    paddingVertical: 14,
   },
 
-  navItem: {
+  // LAYOUT 3 — ancho fijo + resto flexible
+  layout3: {
+    flexDirection: 'row',
+    height: 120,
+    gap: 8,
+  },
+  sidebar: {
+    width: 80,
+    backgroundColor: '#1f6feb',
+    borderRadius: 8,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
+  },
+  content: {
+    flex: 1,
+    backgroundColor: '#161b22',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
-  navIcon: {
-    fontSize: 22,
+  // LAYOUT 4 — grid 2x2 con flexWrap
+  layout4: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
   },
-
-  navLabel: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#cbd5e1',
+  gridItem: {
+    width: '48%',
+    height: 80,
+    backgroundColor: '#161b22',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
