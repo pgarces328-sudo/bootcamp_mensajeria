@@ -5,37 +5,55 @@
 
 import React, { useCallback } from 'react';
 import {
-  View,
-  Text,
   FlatList,
   Pressable,
-  StyleSheet,
   SafeAreaView,
   StatusBar,
-  ListRenderItem,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
+import type { ListRenderItem } from 'react-native';
+
 import {
   NavigationContainer,
   useNavigation,
   useRoute,
-  type RouteProp,
 } from '@react-navigation/native';
-import {
-  createNativeStackNavigator,
-  type NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import type { RouteProp } from '@react-navigation/native';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 // ============================================
 // TIPOS — param list tipado para todo el Stack
 // ============================================
+
 type RootStackParamList = {
   Home: undefined;
-  Detail: { id: string; name: string; category: string };
+  Detail: {
+    id: string;
+    name: string;
+    category: string;
+  };
 };
+
+type HomeNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Home'
+>;
+
+type DetailNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Detail'
+>;
+
+type DetailRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
 // ============================================
 // DATOS MOCK
 // ============================================
+
 interface Product {
   id: string;
   name: string;
@@ -44,31 +62,63 @@ interface Product {
 }
 
 const PRODUCTS: Product[] = [
-  { id: '1', name: 'Laptop Pro 14"', category: 'Electrónica', description: 'Procesador M3, 16GB RAM, 512GB SSD. Ideal para desarrollo y diseño.' },
-  { id: '2', name: 'Auriculares BT', category: 'Electrónica', description: 'Cancelación de ruido activa, 30h batería, sonido premium.' },
-  { id: '3', name: 'Mesa de trabajo', category: 'Muebles', description: 'Madera maciza, 140x70cm, altura ajustable manivela.' },
-  { id: '4', name: 'Silla ergonómica', category: 'Muebles', description: 'Soporte lumbar, reposabrazos 4D, malla transpirable.' },
-  { id: '5', name: 'Monitor 4K 27"', category: 'Electrónica', description: 'Panel IPS, 144Hz, 1ms, HDR400, calibración de fábrica.' },
+  {
+    id: '1',
+    name: 'Laptop Pro 14"',
+    category: 'Electrónica',
+    description:
+      'Procesador M3, 16GB RAM, 512GB SSD. Ideal para desarrollo y diseño.',
+  },
+  {
+    id: '2',
+    name: 'Auriculares BT',
+    category: 'Electrónica',
+    description:
+      'Cancelación de ruido activa, 30h batería, sonido premium.',
+  },
+  {
+    id: '3',
+    name: 'Mesa de trabajo',
+    category: 'Muebles',
+    description:
+      'Madera maciza, 140x70cm, altura ajustable manivela.',
+  },
+  {
+    id: '4',
+    name: 'Silla ergonómica',
+    category: 'Muebles',
+    description:
+      'Soporte lumbar, reposabrazos 4D, malla transpirable.',
+  },
+  {
+    id: '5',
+    name: 'Monitor 4K 27"',
+    category: 'Electrónica',
+    description:
+      'Panel IPS, 144Hz, 1ms, HDR400, calibración de fábrica.',
+  },
 ];
 
 // ============================================
 // PASO 1: Stack Navigator tipado
 // ============================================
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 // ============================================
 // SCREEN: HomeScreen
 // ============================================
+
 function HomeScreen(): React.JSX.Element {
-  // PASO 2: navegación tipada
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList, 'Home'>>();
+  const navigation = useNavigation<HomeNavigationProp>();
 
   const renderItem: ListRenderItem<Product> = useCallback(
     ({ item }) => (
       <Pressable
-        style={({ pressed }) => [styles.item, pressed && styles.itemPressed]}
-        // PASO 2: navegar con params
+        style={({ pressed }) => [
+          styles.item,
+          pressed ? styles.itemPressed : null,
+        ]}
         onPress={() =>
           navigation.navigate('Detail', {
             id: item.id,
@@ -81,6 +131,7 @@ function HomeScreen(): React.JSX.Element {
           <Text style={styles.itemName}>{item.name}</Text>
           <Text style={styles.itemCategory}>{item.category}</Text>
         </View>
+
         <Text style={styles.chevron}>›</Text>
       </Pressable>
     ),
@@ -103,17 +154,14 @@ function HomeScreen(): React.JSX.Element {
 // ============================================
 // SCREEN: DetailScreen
 // ============================================
-type DetailRouteProp = RouteProp<RootStackParamList, 'Detail'>;
 
 function DetailScreen(): React.JSX.Element {
-  // PASO 2: para poder volver
-  const navigation = useNavigation();
-
-  // PASO 3: recibir los params
+  const navigation = useNavigation<DetailNavigationProp>();
   const route = useRoute<DetailRouteProp>();
+
   const { id, name, category } = route.params;
 
-  const product = PRODUCTS.find((p) => p.id === id);
+  const product = PRODUCTS.find((item) => item.id === id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -121,17 +169,22 @@ function DetailScreen(): React.JSX.Element {
         <View style={styles.categoryBadge}>
           <Text style={styles.categoryText}>{category}</Text>
         </View>
+
         <Text style={styles.detailName}>{name}</Text>
         <Text style={styles.detailId}>ID: {id}</Text>
+
         {product ? (
           <Text style={styles.detailDescription}>{product.description}</Text>
-        ) : null}
+        ) : (
+          <Text style={styles.detailDescription}>
+            No se encontró la descripción del producto.
+          </Text>
+        )}
 
-        {/* PASO 2: botón de volver */}
         <Pressable
           style={({ pressed }) => [
             styles.backButton,
-            pressed && styles.backButtonPressed,
+            pressed ? styles.backButtonPressed : null,
           ]}
           onPress={() => navigation.goBack()}
         >
@@ -145,30 +198,40 @@ function DetailScreen(): React.JSX.Element {
 // ============================================
 // App principal
 // ============================================
+
 export default function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <StatusBar barStyle="light-content" backgroundColor="#0d1117" />
 
-      {/* PASO 4: estilos globales del header */}
       <Stack.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: '#161b22' },
+          headerStyle: {
+            backgroundColor: '#161b22',
+          },
           headerTintColor: '#e6edf3',
-          headerTitleStyle: { fontWeight: '600' },
-          contentStyle: { backgroundColor: '#0d1117' },
+          headerTitleStyle: {
+            fontWeight: '600',
+          },
+          contentStyle: {
+            backgroundColor: '#0d1117',
+          },
         }}
       >
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Productos' }}
+          options={{
+            title: 'Productos',
+          }}
         />
-        {/* PASO 4: título dinámico con params */}
+
         <Stack.Screen
           name="Detail"
           component={DetailScreen}
-          options={({ route }) => ({ title: route.params.name })}
+          options={({ route }) => ({
+            title: route.params.name,
+          })}
         />
       </Stack.Navigator>
     </NavigationContainer>
@@ -178,15 +241,18 @@ export default function App(): React.JSX.Element {
 // ============================================
 // ESTILOS
 // ============================================
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0d1117',
   },
+
   listContent: {
     paddingTop: 8,
     paddingBottom: 24,
   },
+
   item: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -194,34 +260,42 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     backgroundColor: '#0d1117',
   },
+
   itemPressed: {
     backgroundColor: '#161b22',
   },
+
   itemContent: {
     flex: 1,
   },
+
   itemName: {
     fontSize: 16,
     fontWeight: '600',
     color: '#e6edf3',
     marginBottom: 3,
   },
+
   itemCategory: {
     fontSize: 13,
     color: '#8b949e',
   },
+
   chevron: {
     fontSize: 20,
     color: '#8b949e',
   },
+
   separator: {
     height: 1,
     backgroundColor: '#21262d',
     marginLeft: 16,
   },
+
   detailContainer: {
     padding: 20,
   },
+
   categoryBadge: {
     alignSelf: 'flex-start',
     backgroundColor: '#61DAFB33',
@@ -230,28 +304,33 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
   },
+
   categoryText: {
     fontSize: 12,
     fontWeight: '600',
     color: '#61DAFB',
   },
+
   detailName: {
     fontSize: 24,
     fontWeight: '700',
     color: '#e6edf3',
     marginBottom: 6,
   },
+
   detailId: {
     fontSize: 13,
     color: '#8b949e',
     marginBottom: 16,
   },
+
   detailDescription: {
     fontSize: 15,
     color: '#c9d1d9',
     lineHeight: 22,
     marginBottom: 32,
   },
+
   backButton: {
     backgroundColor: '#161b22',
     borderWidth: 1,
@@ -260,9 +339,11 @@ const styles = StyleSheet.create({
     padding: 14,
     alignItems: 'center',
   },
+
   backButtonPressed: {
     backgroundColor: '#21262d',
   },
+
   backButtonText: {
     fontSize: 15,
     color: '#61DAFB',
