@@ -1,7 +1,7 @@
 {
-  "name": "ejercicio-01-core-components",
+  "name": "ejercicio-01-flatlist-basica",
   "version": "1.0.0",
-  "main": "expo/AppEntry",
+  "main": "App.tsx",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
