@@ -1,115 +1,70 @@
+Sí, claro. Este sería el **README de Semana 01** con el mismo estilo más completo que te gustó del de Semana 02, pero adaptado correctamente a lo que pedía la **Semana 01: Core Components y Flexbox**.
+
+Pégalo en:
+
+```txt
+week-01-core_components_y_flexbox/3-proyecto/README.md
+```
+
+````md
 # Proyecto Semana 01 — App de Tarjetas
 
-Semana 01 — Fundamentos RN | Tiempo estimado: 3h
+Semana 01 — Core Components y Flexbox  
+Fase 1 — Fundamentos React Native
 
 ---
 
 ## 🎯 Objetivo
 
-Construir una app de pantalla única que muestre una lista de tarjetas usando los Core Components y Flexbox. La app debe adaptarse al dominio asignado por el instructor.
+Construir una app móvil de pantalla única que muestre una lista de tarjetas usando los Core Components de React Native y Flexbox.
 
-En este proyecto, el dominio asignado es **Empresa de mensajería / Courier**.  
-Cada tarjeta representa un paquete o envío dentro de una operación de mensajería. La app permite visualizar datos relacionados con paquetes, rutas, conductores y clientes.
+En este proyecto, el dominio asignado es **Empresa de mensajería / Courier**. La app muestra tarjetas de paquetes o envíos activos dentro de una operación de mensajería. Cada tarjeta presenta información relacionada con el paquete, el cliente, la ruta y el conductor asignado.
 
-El objetivo principal es aplicar los fundamentos de React Native trabajados durante la Semana 01:
-
-- Core Components.
-- Estilos con `StyleSheet.create`.
-- Layouts con Flexbox.
-- TypeScript con tipos explícitos.
-- Organización básica de una app en carpetas.
+El objetivo principal de esta semana es practicar la construcción de interfaces móviles usando componentes básicos de React Native, estilos con `StyleSheet.create` y distribución visual con Flexbox.
 
 ---
 
-## 📋 Tu Dominio Asignado
+## 📋 Dominio asignado
 
-**Dominio:** Empresa de mensajería / Courier.
+**Empresa de mensajería / Courier**
 
-Cada aprendiz trabaja sobre un dominio único para evitar copias y fomentar implementaciones originales.
+Este dominio representa una empresa encargada de gestionar envíos, paquetes, clientes, conductores y rutas de entrega.
 
-En este caso, la app está enfocada en una empresa courier que administra envíos activos, rutas de entrega, conductores asignados y clientes destinatarios.
-
----
-
-## 💡 Adaptación por Dominio
-
-| Dominio | Elemento | Datos en la tarjeta |
-|---|---|---|
-| 🚚 Empresa de mensajería / Courier | Paquete / Envío | Código, tipo de servicio, estado, cliente, dirección, conductor, vehículo, ruta, trayecto, ETA, peso, paradas e imagen |
+En la app, cada tarjeta representa un paquete o envío. La información mostrada permite consultar rápidamente el estado de la operación logística y los datos principales de cada entrega.
 
 ---
 
-## ✅ Requisitos Funcionales
+## 📦 Descripción del proyecto
 
-- Pantalla principal con `ScrollView`.
-- Mínimo 3 tarjetas con datos coherentes al dominio.
-- Cada tarjeta muestra:
-  - Una imagen local o URL.
-  - Al menos 2 textos con estilos distintos.
-  - Una acción usando `Pressable` con feedback visual.
-- Header de la app con el nombre del dominio.
-- Estilos con `StyleSheet.create`, sin estilos inline.
-- TypeScript con interfaces definidas para los datos del dominio.
-- Datos organizados en archivos separados.
-- Componente de tarjeta reutilizable.
-- Pantalla principal separada en una carpeta `screens`.
+**Mensajería Courier** es una aplicación móvil de pantalla única construida con React Native y Expo.
 
----
+La pantalla principal muestra una lista de tarjetas de envíos. Cada tarjeta contiene información operativa sobre un paquete, como el código del envío, el tipo de servicio, estado actual, cliente destinatario, dirección, conductor asignado, vehículo, ruta, trayecto, ETA, peso y número de paradas.
 
-## ✅ Requisitos implementados
+La app también incluye filtros por estado del envío usando botones interactivos. Estos filtros permiten visualizar paquetes según su estado operativo:
 
-La app implementa los requisitos de la siguiente manera:
+- Todos
+- Pendiente
+- En tránsito
+- Entregado
+- Programado
 
-- Usa `ScrollView` para mostrar la lista de tarjetas.
-- Muestra más de 3 tarjetas de paquetes.
-- Cada tarjeta tiene una imagen por URL.
-- Cada tarjeta muestra información de paquete, cliente, conductor y ruta.
-- Cada tarjeta incluye un botón `Pressable`.
-- El botón tiene feedback visual al presionarse.
-- El botón permite mostrar u ocultar el detalle operativo del envío.
-- El header muestra el nombre **Mensajería Courier**.
-- Los estilos están definidos con `StyleSheet.create`.
-- Los datos del dominio están tipados con TypeScript.
-- La estructura del código está separada en `types`, `data`, `components` y `screens`.
-
----
-
-## 📁 Estructura del starter
-
-```txt
-starter/
-├── App.tsx               # Punto de entrada
-├── package.json          # Dependencias del proyecto
-├── tsconfig.json         # Configuración TypeScript
-├── app.json              # Configuración Expo
-├── index.ts              # Registro del componente principal
-├── assets/               # Recursos estáticos
-└── src/
-    ├── types/
-    │   └── index.ts      # Interfaces del dominio Courier
-    ├── data/
-    │   └── mockData.ts   # Datos de ejemplo de paquetes
-    ├── components/
-    │   └── ItemCard.tsx  # Componente tarjeta reutilizable
-    └── screens/
-        └── HomeScreen.tsx # Pantalla principal con la lista
-```
+Además, cada tarjeta incluye una acción usando `Pressable`. Al presionar el botón **Ver detalle del envío**, se despliega un panel con información adicional del paquete. El botón también tiene feedback visual al presionarse, cumpliendo con los requisitos de interacción de la semana.
 
 ---
 
 ## 🧩 Entidades del dominio
 
-La app utiliza cuatro entidades principales relacionadas con una empresa de mensajería:
+La app utiliza cuatro entidades principales relacionadas con una empresa courier.
 
 ### Package / Envío
 
-Representa el paquete gestionado por la empresa.
+Representa el paquete gestionado por la empresa de mensajería.
 
 Datos usados:
 
 - Código del paquete.
 - Tipo de servicio.
-- Estado.
+- Estado del envío.
 - ETA.
 - Peso.
 - Imagen.
@@ -167,6 +122,25 @@ Cada tarjeta de envío muestra información operativa como:
 
 ---
 
+## ✅ Requisitos cumplidos
+
+- Pantalla principal de una sola vista.
+- Lista de tarjetas usando `ScrollView`.
+- Mínimo 3 tarjetas con datos coherentes al dominio asignado.
+- Cada tarjeta muestra una imagen.
+- Cada tarjeta tiene textos con estilos distintos.
+- Cada tarjeta incluye una acción usando `Pressable`.
+- El botón tiene feedback visual al presionarse.
+- El botón permite mostrar u ocultar el detalle operativo del envío.
+- Header de la app con el nombre del dominio.
+- Estilos definidos con `StyleSheet.create`.
+- Layout construido con Flexbox.
+- Código escrito en TypeScript.
+- Interfaces definidas para los datos del dominio.
+- Proyecto organizado en carpetas `src`.
+
+---
+
 ## 🧱 Core Components usados
 
 En el proyecto se utilizaron los Core Components solicitados para la Semana 01:
@@ -180,11 +154,13 @@ En el proyecto se utilizaron los Core Components solicitados para la Semana 01:
 - `SafeAreaView`
 - `StyleSheet.create`
 
+Estos componentes permiten construir la interfaz usando únicamente herramientas nativas de React Native, sin librerías externas de UI.
+
 ---
 
 ## 📐 Uso de Flexbox
 
-La interfaz utiliza Flexbox para organizar los elementos en pantalla.
+La interfaz fue construida usando Flexbox para organizar los elementos en pantalla.
 
 Propiedades utilizadas:
 
@@ -198,9 +174,117 @@ Ejemplos de uso dentro de la app:
 
 - `flex: 1` para que la pantalla ocupe todo el espacio disponible.
 - `flexDirection: 'row'` para organizar filtros, tarjetas resumen y cajas de información.
-- `justifyContent: 'space-between'` para separar código del paquete y estado.
-- `alignItems: 'center'` para alinear elementos en filas.
+- `justifyContent: 'space-between'` para separar el código del paquete y el estado.
+- `alignItems: 'center'` para alinear elementos dentro de filas.
 - `gap` para separar elementos dentro de contenedores.
+
+---
+
+## 🎨 Decisiones de diseño
+
+Se utilizó una paleta visual basada en tonos azules, grises y blancos para representar un entorno logístico y operativo.
+
+Las tarjetas tienen fondo blanco para destacar sobre el fondo general de la app. Los estados del paquete usan colores diferenciados para facilitar la lectura rápida:
+
+- Verde para entregado.
+- Azul para en tránsito.
+- Amarillo para pendiente.
+- Morado para programado.
+
+El diseño busca que la información de cada envío sea clara y fácil de consultar. Por eso, cada tarjeta agrupa los datos principales en secciones visuales:
+
+- Encabezado con código y estado.
+- Información del cliente, conductor y ruta.
+- Datos resumidos de ETA, peso y paradas.
+- Botón para mostrar el detalle operativo.
+
+---
+
+## 📁 Estructura del proyecto
+
+```txt
+3-proyecto/
+├── README.md
+├── screenshots/
+└── starter/
+    ├── App.tsx
+    ├── app.json
+    ├── index.ts
+    ├── package.json
+    ├── pnpm-lock.yaml
+    ├── tsconfig.json
+    ├── assets/
+    └── src/
+        ├── types/
+        │   └── index.ts
+        ├── data/
+        │   └── mockData.ts
+        ├── components/
+        │   └── ItemCard.tsx
+        └── screens/
+            └── HomeScreen.tsx
+```
+
+---
+
+## 📄 Descripción de archivos principales
+
+### `App.tsx`
+
+Punto de entrada visual de la aplicación. Renderiza la pantalla principal `HomeScreen`.
+
+### `src/screens/HomeScreen.tsx`
+
+Contiene la pantalla principal de la app. En este archivo se renderizan:
+
+- Header de la app.
+- Tarjetas resumen.
+- Filtros por estado.
+- Lista de tarjetas de paquetes.
+
+### `src/components/ItemCard.tsx`
+
+Componente reutilizable que muestra la información de cada paquete o envío.
+
+Cada tarjeta muestra varios campos del dominio:
+
+- Código.
+- Tipo de servicio.
+- Estado.
+- Cliente.
+- Dirección.
+- Conductor.
+- Vehículo.
+- Ruta.
+- Trayecto.
+- ETA.
+- Peso.
+- Paradas.
+
+También incluye el botón `Pressable` para mostrar u ocultar el detalle operativo del envío.
+
+### `src/data/mockData.ts`
+
+Contiene los datos simulados del dominio. Incluye paquetes, clientes, conductores y rutas.
+
+### `src/types/index.ts`
+
+Contiene los tipos e interfaces TypeScript usados para representar los datos del dominio.
+
+---
+
+## ⚙️ Configuración en Expo
+
+El archivo `app.json` contiene el nombre relacionado con el dominio asignado:
+
+```json
+{
+  "expo": {
+    "name": "Mensajeria Courier",
+    "slug": "mensajeria-courier"
+  }
+}
+```
 
 ---
 
@@ -220,75 +304,53 @@ También se puede ejecutar con:
 npx expo start
 ```
 
-Luego se puede abrir la app usando:
+Luego se puede abrir la app en:
 
-- Expo Go en dispositivo físico.
+- Expo Go.
 - Emulador Android.
 - Simulador iOS.
 - Navegador web si Expo lo permite.
 
 ---
 
-## 🛠️ Entregables
+## 🧪 Pruebas sugeridas
 
-- App funcional en simulador, Expo Go o navegador.
-- Mínimo 3 tarjetas con datos del dominio **Empresa de mensajería / Courier**.
-- Código subido al repositorio.
-- Nombre del dominio configurado en `app.json`.
-- Screenshot o grabación de la app funcionando.
-- README del proyecto adaptado al dominio asignado.
+Al ejecutar la app se recomienda verificar:
 
----
-
-## ⚙️ Configuración del dominio en app.json
-
-El archivo `app.json` contiene el nombre relacionado con el dominio asignado:
-
-```json
-{
-  "expo": {
-    "name": "Mensajeria Courier",
-    "slug": "mensajeria-courier"
-  }
-}
-```
-
----
-
-## 📊 Criterios de Evaluación
-
-Ver:
-
-```txt
-../rubrica-evaluacion.md
-```
-
----
-
-## 📌 Restricciones
-
-- ❌ No usar `position: 'absolute'`.
-- ❌ No usar ninguna librería de UI externa.
-- ❌ No usar estilos inline como `style={{ ... }}` directo en JSX.
-- ✅ Usar solo Flexbox para construir el layout.
-- ✅ Todo el código en TypeScript con tipos explícitos.
-- ✅ Usar `StyleSheet.create` para los estilos.
+- Que el header muestre **Mensajería Courier**.
+- Que se visualicen las tarjetas de envíos.
+- Que cada tarjeta tenga una imagen.
+- Que los filtros por estado funcionen.
+- Que el botón **Ver detalle del envío** despliegue el panel de detalle.
+- Que el botón cambie visualmente al presionarse.
+- Que no existan errores en Metro o en la consola.
 
 ---
 
 ## 📸 Evidencia
 
-La entrega debe incluir una captura o grabación de la app funcionando.
+Agregar captura o grabación de la app funcionando en Expo Go, emulador o navegador.
 
 La evidencia debe mostrar:
 
 - Header con el nombre **Mensajería Courier**.
 - Lista de tarjetas de envíos.
-- Imagen visible en las tarjetas.
-- Datos del paquete, cliente, conductor y ruta.
+- Imágenes visibles.
 - Filtros por estado.
 - Botón **Ver detalle del envío**.
-- Panel de detalle operativo desplegado al presionar el botón.
+- Panel de detalle operativo desplegado.
+
+---
+
+## 📌 Restricciones cumplidas
+
+- No se usó `position: 'absolute'`.
+- No se usaron librerías externas de UI.
+- No se usaron estilos inline.
+- Todo el layout fue construido con Flexbox.
+- Todo el código fue escrito en TypeScript.
+- Los estilos fueron creados con `StyleSheet.create`.
+- La app fue adaptada al dominio asignado.
 
 ---
 
@@ -296,15 +358,14 @@ La evidencia debe mostrar:
 
 Al ejecutar la app se muestra una pantalla de control operativo para una empresa de mensajería.
 
-El usuario puede:
+El usuario puede visualizar paquetes activos, identificar su estado, conocer el cliente destinatario, revisar el conductor asignado, consultar la ruta y desplegar más información del envío mediante una acción interactiva.
 
-- Visualizar paquetes activos.
-- Identificar el estado de cada envío.
-- Ver el cliente destinatario.
-- Consultar el conductor asignado.
-- Revisar la ruta y el trayecto.
-- Filtrar envíos por estado.
-- Mostrar u ocultar el detalle operativo de cada paquete.
+Este proyecto demuestra el uso práctico de los fundamentos de React Native trabajados durante la Semana 01:
 
-La app demuestra el uso de Core Components, estilos con `StyleSheet.create`, TypeScript y Flexbox en React Native.
-```
+- Core Components.
+- Flexbox.
+- Estilos con `StyleSheet.create`.
+- Componentes reutilizables.
+- TypeScript.
+- Adaptación a un dominio real.
+````
