@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { drivers, routes } from '../data/mockData';
+import { usePackageStore } from '../store/usePackageStore';
 import {
   BORDER_WIDTH,
   COLORS,
@@ -8,7 +9,7 @@ import {
   RADIUS,
   SHADOWS,
   SPACING,
-  TYPOGRAPHY
+  TYPOGRAPHY,
 } from '../theme';
 import type { CourierPackage, PackageStatus } from '../types';
 
@@ -21,6 +22,11 @@ export function ShipmentCard({ item, onPress }: ShipmentCardProps) {
   const driver = drivers.find((driverItem) => driverItem.id === item.driverId);
   const route = routes.find((routeItem) => routeItem.id === item.routeId);
 
+  const isTracked = usePackageStore((state) =>
+    state.trackedIds.includes(item.id)
+  );
+  const toggleTracked = usePackageStore((state) => state.toggleTracked);
+
   const badgeStyle = getStatusBadgeStyle(item.status);
   const textStyle = getStatusTextStyle(item.status);
 
@@ -28,7 +34,7 @@ export function ShipmentCard({ item, onPress }: ShipmentCardProps) {
     <Pressable
       style={({ pressed }) => [
         styles.card,
-        pressed ? styles.cardPressed : null
+        pressed ? styles.cardPressed : null,
       ]}
       onPress={onPress}
     >
@@ -38,8 +44,21 @@ export function ShipmentCard({ item, onPress }: ShipmentCardProps) {
           <Text style={styles.service}>{item.serviceType}</Text>
         </View>
 
-        <View style={[styles.badge, badgeStyle]}>
-          <Text style={[styles.badgeText, textStyle]}>{item.status}</Text>
+        <View style={styles.headerActions}>
+          <View style={[styles.badge, badgeStyle]}>
+            <Text style={[styles.badgeText, textStyle]}>{item.status}</Text>
+          </View>
+
+          <Pressable
+            hitSlop={10}
+            onPress={() => toggleTracked(item.id)}
+            style={({ pressed }) => [
+              styles.trackButton,
+              pressed ? styles.trackButtonPressed : null,
+            ]}
+          >
+            <Text style={styles.trackIcon}>{isTracked ? '★' : '☆'}</Text>
+          </Pressable>
         </View>
       </View>
 
@@ -129,129 +148,147 @@ const styles = StyleSheet.create({
     padding: SPACING.lg,
     borderWidth: BORDER_WIDTH.thin,
     borderColor: COLORS.border,
-    ...SHADOWS.card
+    ...SHADOWS.card,
   },
 
   cardPressed: {
     opacity: INTERACTION.pressedOpacity,
-    transform: [{ scale: INTERACTION.pressedScale }]
+    transform: [{ scale: INTERACTION.pressedScale }],
   },
 
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    gap: SPACING.md
+    gap: SPACING.md,
   },
 
   titleBlock: {
-    flex: 1
+    flex: 1,
   },
 
   code: {
     fontSize: TYPOGRAPHY.cardTitle,
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text
+    color: COLORS.text,
   },
 
   service: {
     marginTop: SPACING.xs,
     fontSize: TYPOGRAPHY.caption,
     fontWeight: TYPOGRAPHY.weightBold,
-    color: COLORS.accent
+    color: COLORS.accent,
+  },
+
+  headerActions: {
+    alignItems: 'flex-end',
+    gap: SPACING.sm,
+  },
+
+  trackButton: {
+    padding: SPACING.xs,
+  },
+
+  trackButtonPressed: {
+    opacity: INTERACTION.pressedOpacity,
+  },
+
+  trackIcon: {
+    fontSize: 24,
+    color: '#F59E0B',
   },
 
   badge: {
     paddingHorizontal: SPACING.md,
     paddingVertical: SPACING.sm,
-    borderRadius: RADIUS.pill
+    borderRadius: RADIUS.pill,
   },
 
   badgeText: {
     fontSize: TYPOGRAPHY.small,
-    fontWeight: TYPOGRAPHY.weightExtraBold
+    fontWeight: TYPOGRAPHY.weightExtraBold,
   },
 
   badgeDelivered: {
-    backgroundColor: COLORS.successBackground
+    backgroundColor: COLORS.successBackground,
   },
 
   badgeInTransit: {
-    backgroundColor: COLORS.infoBackground
+    backgroundColor: COLORS.infoBackground,
   },
 
   badgePending: {
-    backgroundColor: COLORS.warningBackground
+    backgroundColor: COLORS.warningBackground,
   },
 
   badgeScheduled: {
-    backgroundColor: COLORS.purpleBackground
+    backgroundColor: COLORS.purpleBackground,
   },
 
   badgeIncident: {
-    backgroundColor: COLORS.dangerBackground
+    backgroundColor: COLORS.dangerBackground,
   },
 
   textDelivered: {
-    color: COLORS.successText
+    color: COLORS.successText,
   },
 
   textInTransit: {
-    color: COLORS.infoText
+    color: COLORS.infoText,
   },
 
   textPending: {
-    color: COLORS.warningText
+    color: COLORS.warningText,
   },
 
   textScheduled: {
-    color: COLORS.purpleText
+    color: COLORS.purpleText,
   },
 
   textIncident: {
-    color: COLORS.dangerText
+    color: COLORS.dangerText,
   },
 
   infoBlock: {
     marginTop: SPACING.lg,
-    gap: SPACING.sm
+    gap: SPACING.sm,
   },
 
   infoText: {
     fontSize: TYPOGRAPHY.body,
     lineHeight: TYPOGRAPHY.lineHeightBody,
-    color: COLORS.textMuted
+    color: COLORS.textMuted,
   },
 
   label: {
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text
+    color: COLORS.text,
   },
 
   metaRow: {
     marginTop: SPACING.lg,
     flexDirection: 'row',
-    gap: SPACING.md
+    gap: SPACING.md,
   },
 
   metaBox: {
     flex: 1,
     backgroundColor: COLORS.surfaceMuted,
     borderRadius: RADIUS.md,
-    padding: SPACING.md
+    padding: SPACING.md,
   },
 
   metaLabel: {
     fontSize: TYPOGRAPHY.small,
     fontWeight: TYPOGRAPHY.weightExtraBold,
     color: COLORS.textMuted,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
   },
 
   metaValue: {
     marginTop: SPACING.xs,
     fontSize: TYPOGRAPHY.caption,
     fontWeight: TYPOGRAPHY.weightExtraBold,
-    color: COLORS.text
-  }
+    color: COLORS.text,
+  },
 });

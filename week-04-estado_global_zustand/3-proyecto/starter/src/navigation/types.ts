@@ -1,5 +1,6 @@
 export type RootTabParamList = {
   ShipmentsTab: undefined;
+  TrackedTab: undefined;
   DriversTab: undefined;
   RoutesTab: undefined;
 };
