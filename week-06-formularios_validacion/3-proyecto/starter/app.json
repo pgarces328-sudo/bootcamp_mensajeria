@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "mensajeria-courier-forms",
+    "slug": "mensajeria-courier-forms",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true
+  }
+}
