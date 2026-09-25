@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "ejercicio-01-usequery-basico",
+    "slug": "ejercicio-01-usequery-basico",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark"
+  }
+}
