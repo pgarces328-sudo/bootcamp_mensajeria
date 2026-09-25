@@ -1,5 +1,5 @@
 {
-  "name": "mensajeria-courier-forms",
+  "name": "mensajeria-courier-auth",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
