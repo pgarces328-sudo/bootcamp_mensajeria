@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "mensajeria-courier-animaciones",
+    "slug": "mensajeria-courier-animaciones",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true
+  }
+}
