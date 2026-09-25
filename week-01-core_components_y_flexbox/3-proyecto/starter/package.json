@@ -1,5 +1,5 @@
 {
-  "name": "bootcamp_mensajeria",
+  "name": "mensajeria-courier-tarjetas",
   "version": "1.0.0",
   "main": "index.ts",
   "dependencies": {
